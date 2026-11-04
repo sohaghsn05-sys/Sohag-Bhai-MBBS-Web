@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sohag Bhai MBBS Classes - EdTech Learning Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#F4EEFB',
+                            100: '#E2D3F5',
+                            200: '#C4A6EA',
+                            500: '#802BB1', // Primary brand purple
+                            700: '#3B185F', // Dark purple core
+                            800: '#2A0944', // Darker shade
+                            900: '#19032B', // Darkest shade
+                            accent: '#FFB300'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Kalpurush', 'sans-serif'],
+                        bengali: ['Kalpurush', 'SolaimanLipi', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', 'Kalpurush', sans-serif; }
+        .bengali-text { font-family: 'Kalpurush', 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #802BB1; border-radius: 4px; }
+        .glass-header { backdrop-filter: blur(12px); background-color: rgba(42, 9, 68, 0.94); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- TOP PERMANENT CONTROL & ROLE BAR -->
+    <div class="bg-brand-900 text-white border-b border-brand-800 text-xs py-2 px-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-3">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="font-medium">Active User Session:</span>
+                <span id="top-user-info" class="font-bold text-brand-accent">Guest Student</span>
+                <span id="top-role-badge" class="bg-brand-500 text-white px-2 py-0.5 rounded font-semibold text-[10px] uppercase">Student View</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="toggleNotificationCenter()" class="relative hover:text-brand-accent font-semibold flex items-center gap-1">
+                    <i class="fa-solid fa-bell"></i> Notifications
+                    <span id="notif-badge" class="bg-red-500 text-white text-[9px] font-black px-1.5 py-0.2 rounded-full">0</span>
+                </button>
+                <span class="opacity-40">|</span>
+                <button onclick="switchRole('student')" class="hover:underline font-semibold text-brand-accent flex items-center gap-1">
+                    <i class="fa-solid fa-user-graduate"></i> Student View
+                </button>
+                <span class="opacity-40">|</span>
+                <button onclick="switchRole('admin')" class="hover:underline font-semibold text-gray-300 hover:text-white flex items-center gap-1">
+                    <i class="fa-solid fa-user-shield"></i> Admin Portal
+                </button>
+                <span class="opacity-40">|</span>
+                <button onclick="openAuthModal()" id="btn-top-login" class="px-2.5 py-1 bg-brand-500 text-white rounded font-bold hover:bg-brand-700">
+                    Login / Register
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <header class="sticky top-8 z-40 glass-header text-white border-b border-brand-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo & Name -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                    <div id="brand-logo-container" class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-500 to-brand-accent flex items-center justify-center shadow-lg shadow-brand-500/30 overflow-hidden">
+                        <i class="fa-solid fa-user-md text-2xl text-white" id="brand-logo-icon"></i>
+                        <img id="brand-logo-img" src="" class="w-full h-full object-cover hidden" alt="Logo">
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-xl tracking-tight text-white flex items-center gap-2">
+                            <span id="platform-title-display">Sohag Bhai</span>
+                            <span class="text-brand-accent text-xs font-bold px-2 py-0.5 bg-brand-800 rounded border border-brand-500/30 uppercase tracking-wider">MBBS LMS</span>
+                        </h1>
+                        <p class="text-[11px] text-brand-200">Premier Digital Medical Education Platform</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center gap-1">
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-white bg-brand-500/20">
+                        <i class="fa-solid fa-house"></i> Home
+                    </button>
+                    <button onclick="switchTab('enroll')" id="nav-enroll" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-brand-200 hover:text-white hover:bg-brand-800">
+                        <i class="fa-solid fa-graduation-cap text-brand-accent"></i> Enroll
+                    </button>
+                    <button onclick="switchTab('student-dashboard')" id="nav-student-dashboard" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-brand-200 hover:text-white hover:bg-brand-800">
+                        <i class="fa-solid fa-laptop-medical"></i> Student Dashboard
+                    </button>
+                    <button onclick="switchTab('examinations')" id="nav-examinations" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-brand-200 hover:text-white hover:bg-brand-800">
+                        <i class="fa-solid fa-file-pen text-amber-400"></i> Examinations
+                    </button>
+                    <button onclick="switchTab('admin-dashboard')" id="nav-admin-dashboard" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-brand-200 hover:text-white hover:bg-brand-800">
+                        <i class="fa-solid fa-sliders"></i> Admin Dashboard
+                    </button>
+                </nav>
+
+                <!-- Profile & Mode Control -->
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-lg bg-brand-800 text-brand-200 hover:text-white transition">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline"></i>
+                    </button>
+
+                    <div class="hidden sm:flex items-center gap-3 pl-3 border-l border-brand-700/60">
+                        <div class="w-10 h-10 rounded-full bg-brand-700 border-2 border-brand-accent flex items-center justify-center font-bold text-white shadow">
+                            <span id="user-avatar-initials">RA</span>
+                        </div>
+                    </div>
+
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-lg text-brand-200 hover:text-white">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-brand-800 bg-brand-900 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('home')" class="w-full text-left px-3 py-2 rounded-md text-white bg-brand-800 flex items-center gap-2"><i class="fa-solid fa-house"></i> Home</button>
+            <button onclick="switchTab('enroll')" class="w-full text-left px-3 py-2 rounded-md text-brand-200 hover:bg-brand-800 flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-brand-accent"></i> Enroll Courses</button>
+            <button onclick="switchTab('student-dashboard')" class="w-full text-left px-3 py-2 rounded-md text-brand-200 hover:bg-brand-800 flex items-center gap-2"><i class="fa-solid fa-laptop-medical"></i> Student Dashboard</button>
+            <button onclick="switchTab('examinations')" class="w-full text-left px-3 py-2 rounded-md text-brand-200 hover:bg-brand-800 flex items-center gap-2"><i class="fa-solid fa-file-pen text-amber-400"></i> Examinations</button>
+            <button onclick="switchTab('admin-dashboard')" class="w-full text-left px-3 py-2 rounded-md text-brand-200 hover:bg-brand-800 flex items-center gap-2"><i class="fa-solid fa-sliders"></i> Admin Portal</button>
+        </div>
+    </header>
+
+    <!-- IN-APP NOTIFICATION DRAWER -->
+    <div id="notif-drawer" class="fixed top-20 right-4 z-50 w-80 sm:w-96 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 space-y-3 hidden">
+        <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-2">
+            <h4 class="font-bold text-sm text-brand-900 dark:text-white"><i class="fa-solid fa-bell text-brand-500 mr-1.5"></i> Notification Center</h4>
+            <button onclick="toggleNotificationCenter()" class="text-xs text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="notif-list" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar text-xs">
+            <!-- Dynamic Notifications -->
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT BODY -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- 1. TAB: HOMEPAGE & BRANDING -->
+        <section id="tab-home" class="tab-content space-y-10">
+            <!-- Hero Banner -->
+            <div class="relative bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white rounded-3xl p-8 sm:p-14 overflow-hidden shadow-2xl border border-brand-500/30">
+                <div class="relative z-10 max-w-3xl space-y-6">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-brand-accent/20 border border-brand-accent/40 text-brand-accent rounded-full text-xs font-bold">
+                        <i class="fa-solid fa-award"></i> Premier Bangladeshi Medical Learning LMS
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                        Excellence in MBBS Education & High-Yield Clinical Mastery
+                    </h2>
+                    
+                    <!-- BENGALI WELCOME MESSAGE REQUIRED -->
+                    <div class="bg-brand-900/80 border-l-4 border-brand-accent p-5 rounded-2xl backdrop-blur-md shadow-inner space-y-2">
+                        <p id="bengali-welcome-text" class="bengali-text text-sm sm:text-base leading-relaxed text-brand-100 font-medium">
+                            "Sohag Bhai MBBS Classes-এ আপনাদের সবাইকে আন্তরিক স্বাগতম। মেডিকেল শিক্ষাজীবনকে আরও সহজ, সুন্দর ও আনন্দময় করে তুলতে আমাদের এই ক্ষুদ্র প্রচেষ্টা। জ্ঞান অর্জনের পথচলায় আপনাদের পাশে থাকতে এবং শেখার অভিজ্ঞতাকে আরও সমৃদ্ধ করতে আমরা প্রতিনিয়ত কাজ করে যেতে চাই। আমাদের সঙ্গে থাকুন, শিখুন এবং এগিয়ে যান। ধন্যবাদ। ❤️"
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchTab('enroll')" class="px-6 py-3.5 bg-brand-accent text-brand-900 font-extrabold rounded-xl shadow-lg hover:bg-yellow-400 transition flex items-center gap-2">
+                            Explore Premium Batches <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button onclick="openFirstTimeApprovalModal()" class="px-6 py-3.5 bg-brand-500/30 hover:bg-brand-500/50 border border-brand-500/50 text-white font-bold rounded-xl transition flex items-center gap-2">
+                            <i class="fa-solid fa-envelope-circle-check"></i> First-Time Email Registration Approval
+                        </button>
+                    </div>
+                </div>
+                <i class="fa-solid fa-user-doctor absolute -bottom-12 -right-8 text-[260px] text-white/5 pointer-events-none"></i>
+            </div>
+
+            <!-- Subject Explorer Section -->
+            <div class="space-y-6">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h3 class="text-2xl font-black text-brand-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-book-medical text-brand-500"></i> MBBS Core Subjects
+                        </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Structured Anatomy, Physiology, and Biochemistry Modules.</p>
+                    </div>
+                </div>
+
+                <div id="home-subjects-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Featured Classes Preview -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-black text-brand-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-circle-play text-brand-accent"></i> Latest Uploaded Video Lectures
+                </h3>
+                <div id="home-videos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. TAB: PREMIUM COURSE MARKETPLACE (ENROLL) -->
+        <section id="tab-enroll" class="tab-content space-y-8 hidden">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-black text-brand-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-brand-accent"></i> Premium Paid Batches Marketplace
+                    </h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Enroll in top-tier medical courses designed for 1st Prof & Final Prof MBBS excellence.</p>
+                </div>
+                <div class="flex gap-2">
+                    <select id="enroll-filter-category" onchange="renderStorefrontGrid()" class="px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-semibold">
+                        <option value="ALL">All Categories</option>
+                        <option value="Anatomy">Anatomy</option>
+                        <option value="Physiology">Physiology</option>
+                        <option value="Biochemistry">Biochemistry</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="enroll-courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Dynamically Populated Cards -->
+            </div>
+        </section>
+
+        <!-- 3. TAB: STUDENT DASHBOARD -->
+        <section id="tab-student-dashboard" class="tab-content space-y-8 hidden">
+            <!-- Personalized Welcome Bar -->
+            <div class="bg-gradient-to-r from-brand-900 to-brand-700 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-brand-500/20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Student Portal</span>
+                    <h2 class="text-2xl sm:text-3xl font-black mt-1" id="dash-welcome-name">Welcome, Dr. Student</h2>
+                    <p class="text-xs text-brand-200 mt-1">Student ID: <span id="dash-student-id" class="font-mono text-brand-accent font-bold">SB-2026-0001</span> | Persistent Session Active</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="dash-approval-status" class="px-3 py-1.5 bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-check"></i> Account Approved
+                    </span>
+                </div>
+            </div>
+
+            <!-- Dashboard Sub-Sections -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column: My Courses & Continue Watching -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Continue Watching -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-4">
+                        <h3 class="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-brand-500"></i> Continue Watching Progress
+                        </h3>
+                        <div id="continue-watching-box" class="space-y-3">
+                            <!-- Populated JS -->
+                        </div>
+                    </div>
+
+                    <!-- Approved Enrolled Courses -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-4">
+                        <h3 class="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-laptop-medical text-emerald-500"></i> My Approved Courses
+                        </h3>
+                        <div id="student-enrolled-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Populated JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Recent Notes & Payment Requests Status -->
+                <div class="space-y-8">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-4">
+                        <h3 class="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-receipt text-amber-500"></i> Submitted Payment Requests
+                        </h3>
+                        <div id="student-payment-requests-history" class="space-y-3 text-xs">
+                            <!-- Populated JS -->
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-4">
+                        <h3 class="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-file-pdf text-red-500"></i> PDF Resources
+                        </h3>
+                        <div id="student-pdfs-list" class="space-y-2 text-xs">
+                            <!-- Populated JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. TAB: EXTERNAL EXAMINATIONS SYSTEM -->
+        <section id="tab-examinations" class="tab-content space-y-8 hidden">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-2">
+                <h2 class="text-2xl font-black text-brand-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-file-pen text-amber-400"></i> External Examination Portal
+                </h2>
+                <p class="text-xs text-gray-500 dark:text-gray-400">All MBBS assessment exams are conducted via official external links. Click "Start Examination" to open external portal in new tab.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="student-exams-grid">
+                <!-- Dynamically Populated Exams -->
+            </div>
+        </section>
+
+        <!-- 5. TAB: ADMIN DASHBOARD (COMPLETE CONTROL CENTER) -->
+        <section id="tab-admin-dashboard" class="tab-content space-y-8 hidden">
+            <!-- Analytics Overview Bar -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <p class="text-[11px] text-gray-500">Reg. Students</p>
+                    <p class="text-2xl font-black text-brand-700 dark:text-brand-200" id="stat-total-students">0</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <p class="text-[11px] text-gray-500">Pending Email Approvals</p>
+                    <p class="text-2xl font-black text-amber-500 animate-pulse" id="stat-pending-emails">0</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <p class="text-[11px] text-gray-500">Pending Payments</p>
+                    <p class="text-2xl font-black text-red-500 animate-pulse" id="stat-pending-payments">0</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <p class="text-[11px] text-gray-500">Total Courses</p>
+                    <p class="text-2xl font-black text-brand-500" id="stat-total-courses">0</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <p class="text-[11px] text-gray-500">Total Videos</p>
+                    <p class="text-2xl font-black text-blue-600" id="stat-total-videos">0</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <p class="text-[11px] text-gray-500">Total Revenue</p>
+                    <p class="text-2xl font-black text-emerald-600" id="stat-total-revenue">৳0</p>
+                </div>
+            </div>
+
+            <!-- Admin Subtab Sidebar & Navigation Container -->
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="flex flex-wrap border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                    <button onclick="switchAdminSubTab('emails')" id="subtab-emails" class="admin-tab-btn px-5 py-3.5 text-xs font-bold border-b-2 border-brand-500 text-brand-700 dark:text-brand-300">
+                        <i class="fa-solid fa-envelope-open-text mr-1"></i> Email Requests
+                    </button>
+                    <button onclick="switchAdminSubTab('payments')" id="subtab-payments" class="admin-tab-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-gray-500">
+                        <i class="fa-solid fa-receipt mr-1"></i> Payment Verification
+                    </button>
+                    <button onclick="switchAdminSubTab('courses')" id="subtab-courses" class="admin-tab-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-gray-500">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> Course Marketplace
+                    </button>
+                    <button onclick="switchAdminSubTab('coupons')" id="subtab-coupons" class="admin-tab-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-gray-500">
+                        <i class="fa-solid fa-ticket mr-1"></i> Discount Coupons
+                    </button>
+                    <button onclick="switchAdminSubTab('exams')" id="subtab-exams" class="admin-tab-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-gray-500">
+                        <i class="fa-solid fa-file-pen mr-1"></i> External Exams
+                    </button>
+                    <button onclick="switchAdminSubTab('videos')" id="subtab-videos" class="admin-tab-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-gray-500">
+                        <i class="fa-solid fa-video mr-1"></i> Video & PDF Lessons
+                    </button>
+                    <button onclick="switchAdminSubTab('settings')" id="subtab-settings" class="admin-tab-btn px-5 py-3.5 text-xs font-bold border-b-2 border-transparent text-gray-500">
+                        <i class="fa-solid fa-gear mr-1"></i> Platform Settings
+                    </button>
+                </div>
+
+                <div class="p-6">
+                    <!-- SUBTAB 1: EMAIL APPROVAL REQUESTS -->
+                    <div id="admin-sec-emails" class="space-y-4">
+                        <h3 class="font-bold text-base text-gray-800 dark:text-white">Student First-Time Email Registration Approvals</h3>
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-gray-100 dark:bg-gray-900 uppercase text-gray-500">
+                                    <tr>
+                                        <th class="p-3">Student Email</th>
+                                        <th class="p-3">Request Date</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-table-emails" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Populated JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUBTAB 2: PAYMENT VERIFICATION -->
+                    <div id="admin-sec-payments" class="space-y-4 hidden">
+                        <h3 class="font-bold text-base text-gray-800 dark:text-white">bKash & Nagad Payment Requests Verification</h3>
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-gray-100 dark:bg-gray-900 uppercase text-gray-500">
+                                    <tr>
+                                        <th class="p-3">Student & Date</th>
+                                        <th class="p-3">Course Name</th>
+                                        <th class="p-3">Method & Amount</th>
+                                        <th class="p-3">Sender Phone / TrxID</th>
+                                        <th class="p-3">Screenshot</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-table-payments" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Populated JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUBTAB 3: COURSE MARKETPLACE CREATION -->
+                    <div id="admin-sec-courses" class="space-y-4 hidden">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-base text-gray-800 dark:text-white">Manage Premium Courses Catalog</h3>
+                            <button onclick="openCourseFormModal()" class="px-4 py-2 bg-brand-500 text-white rounded-xl font-bold text-xs hover:bg-brand-700">
+                                <i class="fa-solid fa-plus-circle mr-1"></i> Add New Course
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-gray-100 dark:bg-gray-900 uppercase text-gray-500">
+                                    <tr>
+                                        <th class="p-3">Course Title</th>
+                                        <th class="p-3">Category</th>
+                                        <th class="p-3">Price (BDT)</th>
+                                        <th class="p-3">Display Count</th>
+                                        <th class="p-3">Real Enrolled</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-table-courses" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Populated JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUBTAB 4: COUPON MANAGEMENT -->
+                    <div id="admin-sec-coupons" class="space-y-4 hidden">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-base text-gray-800 dark:text-white">Manage Discount Coupons</h3>
+                            <button onclick="openCouponModal()" class="px-4 py-2 bg-brand-500 text-white rounded-xl font-bold text-xs hover:bg-brand-700">
+                                <i class="fa-solid fa-plus-circle mr-1"></i> Create Coupon
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-gray-100 dark:bg-gray-900 uppercase text-gray-500">
+                                    <tr>
+                                        <th class="p-3">Code</th>
+                                        <th class="p-3">Discount %</th>
+                                        <th class="p-3">Expiry Date</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-table-coupons" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Populated JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUBTAB 5: EXTERNAL EXAMINATIONS -->
+                    <div id="admin-sec-exams" class="space-y-4 hidden">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-base text-gray-800 dark:text-white">External Examination Link Manager</h3>
+                            <button onclick="openExamFormModal()" class="px-4 py-2 bg-brand-500 text-white rounded-xl font-bold text-xs hover:bg-brand-700">
+                                <i class="fa-solid fa-plus-circle mr-1"></i> Add External Exam
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-gray-100 dark:bg-gray-900 uppercase text-gray-500">
+                                    <tr>
+                                        <th class="p-3">Exam Title</th>
+                                        <th class="p-3">Subject / Course Tag</th>
+                                        <th class="p-3">Exam Date & Time</th>
+                                        <th class="p-3">External URL</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-table-exams" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Populated JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUBTAB 6: VIDEO & PDF MANAGEMENT -->
+                    <div id="admin-sec-videos" class="space-y-4 hidden">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-base text-gray-800 dark:text-white">Class Videos & PDF Uploads</h3>
+                            <button onclick="openVideoUploadModal()" class="px-4 py-2 bg-brand-500 text-white rounded-xl font-bold text-xs hover:bg-brand-700">
+                                <i class="fa-solid fa-upload mr-1"></i> Add New Class Lesson
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-gray-100 dark:bg-gray-900 uppercase text-gray-500">
+                                    <tr>
+                                        <th class="p-3">Class Title</th>
+                                        <th class="p-3">Subject & Chapter</th>
+                                        <th class="p-3">PDF Attachment</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-table-videos" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Populated JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUBTAB 7: PLATFORM SETTINGS & BRANDING -->
+                    <div id="admin-sec-settings" class="space-y-6 hidden max-w-xl">
+                        <h3 class="font-bold text-base text-gray-800 dark:text-white">Website Branding & Gateway Configuration</h3>
+                        <form id="form-platform-settings" onsubmit="savePlatformSettings(event)" class="space-y-4 text-xs">
+                            <div>
+                                <label class="block font-semibold mb-1">Platform Name</label>
+                                <input type="text" id="set-platform-name" class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-semibold mb-1">Custom Logo Image URL</label>
+                                <input type="url" id="set-logo-url" placeholder="https://..." class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl">
+                            </div>
+                            <div>
+                                <label class="block font-semibold mb-1">Bengali Welcome Message</label>
+                                <textarea id="set-bengali-msg" rows="3" class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl bengali-text"></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-semibold mb-1">bKash Number</label>
+                                    <input type="text" id="set-bkash" class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl font-mono font-bold">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold mb-1">Nagad Number</label>
+                                    <input type="text" id="set-nagad" class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl font-mono font-bold">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block font-semibold mb-1">Admin Account Password</label>
+                                <input type="text" id="set-admin-pass" class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl font-mono font-bold">
+                            </div>
+                            <button type="submit" class="px-6 py-2.5 bg-brand-500 text-white font-bold rounded-xl hover:bg-brand-700">Save Platform Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-900 text-brand-200 border-t border-brand-800 mt-auto py-8 text-center text-xs">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="font-bold text-white"><i class="fa-solid fa-heart text-red-500"></i> Sohag Bhai MBBS Classes LMS Platform</p>
+            <p>© 2026 Sohag Bhai MBBS Classes. All Rights Reserved. Built for high-yield Bangladeshi MBBS exam success.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: AUTHENTICATION (LOGIN / REGISTER) -->
+    <div id="modal-auth" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-gray-800 max-w-md w-full rounded-3xl p-6 space-y-6 shadow-2xl border border-gray-200 dark:border-gray-700">
+            <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-3">
+                <h3 class="font-black text-lg text-brand-900 dark:text-white" id="auth-modal-title">Student Account Login</h3>
+                <button onclick="closeModal('modal-auth')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form id="form-auth" onsubmit="handleAuthSubmit(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold mb-1">Email Address *</label>
+                    <input type="email" id="auth-email" required class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Password *</label>
+                    <input type="password" id="auth-password" required class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl">
+                </div>
+                <div id="auth-name-container" class="hidden">
+                    <label class="block font-semibold mb-1">Student Full Name *</label>
+                    <input type="text" id="auth-name" class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl">
+                </div>
+
+                <button type="submit" id="auth-submit-btn" class="w-full py-3 bg-brand-500 text-white font-bold rounded-xl hover:bg-brand-700 shadow-lg">Login to Account</button>
+            </form>
+
+            <div class="text-center text-xs text-gray-500">
+                <span id="auth-toggle-text">Don't have an account?</span>
+                <button onclick="toggleAuthMode()" id="auth-toggle-btn" class="text-brand-500 font-bold ml-1 hover:underline">Register Here</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: FIRST-TIME EMAIL ACCESS APPROVAL REQUEST -->
+    <div id="modal-firsttime" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-gray-800 max-w-md w-full rounded-3xl p-6 space-y-4 shadow-2xl border border-gray-200 dark:border-gray-700 text-xs">
+            <div class="flex justify-between items-center">
+                <h3 class="font-black text-base text-brand-900 dark:text-white">First-Time Email Approval Request</h3>
+                <button onclick="closeModal('modal-firsttime')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-gray-500">New students must submit their email for initial Admin approval before registering an account.</p>
+
+            <form onsubmit="submitFirstTimeEmail(event)" class="space-y-3">
+                <div>
+                    <label class="block font-semibold mb-1">Your Email Address *</label>
+                    <input type="email" id="firsttime-email" required class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border rounded-xl">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-brand-500 text-white font-bold rounded-xl hover:bg-brand-700">Submit Registration Access Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: COURSE CHECKOUT & MANUAL BKASH/NAGAD PAYMENT -->
+    <div id="modal-checkout" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-gray-800 max-w-lg w-full rounded-3xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[90vh] flex flex-col text-xs">
+            <div class="bg-gradient-to-r from-brand-900 to-brand-700 text-white p-6 relative">
+                <button onclick="closeModal('modal-checkout')" class="absolute top-4 right-4 text-white/80 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <span class="text-brand-accent font-bold uppercase tracking-wider">Premium Course Enrollment</span>
+                <h3 class="text-lg font-black mt-1" id="checkout-course-title">Course Title</h3>
+            </div>
+
+            <form id="form-checkout" onsubmit="submitCoursePayment(event)" class="p-6 overflow-y-auto custom-scrollbar space-y-4">
+                <input type="hidden" id="checkout-course-id">
+                
+                <!-- Discount Coupon Box -->
+                <div class="bg-gray-50 dark:bg-gray-900 p-3 rounded-xl border border-gray-200 dark:border-gray-700 space-y-2">
+                    <label class="block font-bold">Have a Discount Coupon Code?</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="checkout-coupon-code" placeholder="e.g. MBBS20" class="flex-grow p-2 bg-white dark:bg-gray-800 border rounded-lg uppercase font-mono font-bold">
+                        <button type="button" onclick="applyCoupon()" class="px-3 py-2 bg-brand-500 text-white font-bold rounded-lg hover:bg-brand-700">Apply Coupon</button>
+                    </div>
+                    <div id="checkout-price-breakdown" class="pt-2 border-t border-gray-200 dark:border-gray-700 space-y-1">
+                        <div class="flex justify-between"><span class="text-gray-500">Original Price:</span><span id="checkout-orig-price" class="font-bold">৳0</span></div>
+                        <div class="flex justify-between text-emerald-600"><span class="text-emerald-600">Coupon Discount:</span><span id="checkout-discount-amt" class="font-bold">-৳0</span></div>
+                        <div class="flex justify-between text-sm font-black text-brand-700 dark:text-brand-accent"><span>Final Payable Amount:</span><span id="checkout-final-price">৳0</span></div>
+                    </div>
+                </div>
+
+                <!-- Admin Gateway Details -->
+                <div class="bg-brand-50 dark:bg-brand-950/40 p-3 rounded-xl border border-brand-200 dark:border-brand-800 space-y-2">
+                    <p class="font-bold text-brand-900 dark:text-brand-200">Send Payment to Official Gateway Numbers:</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-white dark:bg-gray-900 p-2 rounded-lg border font-mono">
+                            <span class="font-bold text-pink-600 block">bKash:</span>
+                            <span id="checkout-bkash-num" class="font-bold">01700000000</span>
+                        </div>
+                        <div class="bg-white dark:bg-gray-900 p-2 rounded-lg border font-mono">
+                            <span class="font-bold text-orange-600 block">Nagad:</span>
+                            <span id="checkout-nagad-num" class="font-bold">01800000000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-semibold mb-1">Payment Method *</label>
+                            <select id="checkout-method" required class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl font-bold">
+                                <option value="bKash">bKash</option>
+                                <option value="Nagad">Nagad</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Sender Phone Number *</label>
+                            <input type="text" id="checkout-phone" required placeholder="017XXXXXXXX" class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl font-mono">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold mb-1">Transaction ID (TrxID) *</label>
+                        <input type="text" id="checkout-trxid" required placeholder="e.g. 9B7A6X10Y" class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl font-mono font-bold tracking-wider uppercase">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg">Submit Payment Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 4: SECURE VIDEO PLAYER & PDF LECTURE NOTES -->
+    <div id="modal-video-player" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-6 hidden">
+        <div class="bg-gray-900 text-white w-full max-w-6xl h-[92vh] rounded-3xl overflow-hidden flex flex-col border border-gray-800 shadow-2xl">
+            <!-- Top Nav -->
+            <div class="bg-gray-950 p-4 flex justify-between items-center border-b border-gray-800">
+                <h3 id="player-title" class="font-bold text-sm text-gray-200">Video Lesson</h3>
+                <button onclick="closeModal('modal-video-player')" class="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-xs">Close <i class="fa-solid fa-xmark ml-1"></i></button>
+            </div>
+
+            <div class="flex-grow flex flex-col lg:flex-row overflow-hidden">
+                <!-- Video Stream Canvas & Controls -->
+                <div class="flex-grow bg-black flex flex-col p-4 overflow-y-auto custom-scrollbar">
+                    <div class="w-full aspect-video bg-gray-950 rounded-2xl overflow-hidden border border-gray-800 relative">
+                        <iframe id="player-iframe" class="w-full h-full" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" title="Video Lesson" frameborder="0" allowfullscreen></iframe>
+                    </div>
+
+                    <!-- Quality & Playback Speed Controls Simulation -->
+                    <div class="mt-3 flex flex-wrap items-center justify-between gap-3 bg-gray-950 p-3 rounded-xl border border-gray-800 text-xs text-gray-300">
+                        <div class="flex items-center gap-2">
+                            <span>Quality:</span>
+                            <select onchange="changeQuality(this.value)" class="bg-gray-900 border border-gray-700 rounded px-2 py-1">
+                                <option value="1080p">1080p HD</option>
+                                <option value="720p" selected>720p HD</option>
+                                <option value="480p">480p SD</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span>Speed:</span>
+                            <select onchange="changeSpeed(this.value)" class="bg-gray-900 border border-gray-700 rounded px-2 py-1">
+                                <option value="0.75">0.75x</option>
+                                <option value="1.0" selected>1.0x Normal</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2.0">2.0x</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- PDF Handouts Attachment -->
+                    <div class="mt-4 bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-2">
+                        <h5 class="text-xs font-bold text-amber-400 uppercase"><i class="fa-solid fa-file-pdf text-red-500 mr-1"></i> Class PDF Notes Handout</h5>
+                        <div id="player-pdf-download" class="text-xs">
+                            <!-- Populated JS -->
+                        </div>
+                    </div>
+
+                    <!-- Discussion & Student Q&A Comments -->
+                    <div class="mt-6 space-y-3">
+                        <h5 class="text-xs font-bold uppercase text-brand-accent">Student Q&A Discussion Forum</h5>
+                        <form onsubmit="postComment(event)" class="flex gap-2">
+                            <input type="text" id="comment-input" required placeholder="Ask a question about this lesson..." class="flex-grow p-2.5 bg-gray-950 border border-gray-800 rounded-xl text-xs text-white">
+                            <button type="submit" class="px-4 py-2.5 bg-brand-500 text-white font-bold text-xs rounded-xl hover:bg-brand-700">Post</button>
+                        </form>
+
+                        <div id="player-comments-list" class="space-y-2 text-xs max-h-60 overflow-y-auto custom-scrollbar">
+                            <!-- Populated JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN MODALS: COURSE FORM / COUPON FORM / EXAM FORM / VIDEO FORM -->
+    <div id="modal-admin-course" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-gray-800 max-w-lg w-full rounded-3xl p-6 space-y-4 shadow-2xl text-xs">
+            <h3 class="font-black text-base text-brand-900 dark:text-white">Add / Edit Premium Course</h3>
+            <form onsubmit="saveAdminCourse(event)" class="space-y-3">
+                <input type="hidden" id="acourse-id">
+                <div>
+                    <label class="block font-semibold mb-1">Course Title *</label>
+                    <input type="text" id="acourse-title" required class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold mb-1">Category *</label>
+                        <select id="acourse-category" class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl">
+                            <option value="Anatomy">Anatomy</option>
+                            <option value="Physiology">Physiology</option>
+                            <option value="Biochemistry">Biochemistry</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Price (BDT ৳) *</label>
+                        <input type="number" id="acourse-price" required class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl font-bold">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold mb-1">Display Enrolled Count *</label>
+                        <input type="number" id="acourse-students" required class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Duration *</label>
+                        <input type="text" id="acourse-duration" required placeholder="e.g. 4 Months" class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Poster Image URL</label>
+                    <input type="url" id="acourse-thumb" class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1">Short Description *</label>
+                    <textarea id="acourse-desc" rows="3" required class="w-full p-2 bg-gray-50 dark:bg-gray-900 border rounded-xl"></textarea>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-admin-course')" class="px-4 py-2 font-bold text-gray-500">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-brand-500 text-white font-bold rounded-xl">Save Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        // INITIAL DATABASE STATE & SEEDS
+        const SEED_COURSES = [
+            {
+                id: 'course-101',
+                title: 'Anatomy Masterclass 2026 Batch',
+                category: 'Anatomy',
+                price: 4500,
+                displayStudents: 280,
+                duration: '4 Months Complete',
+                thumbnail: 'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=800&q=80',
+                description: 'Comprehensive Gross Anatomy, Neuroanatomy, and Embryology with clinical correlations for MBBS 1st Prof.'
+            },
+            {
+                id: 'course-102',
+                title: 'Physiology Clinical Preparation Batch',
+                category: 'Physiology',
+                price: 3800,
+                displayStudents: 195,
+                duration: '3.5 Months',
+                thumbnail: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80',
+                description: 'Cardiovascular mechanics, renal clearance, and respiratory physiology simplified.'
+            }
+        ];
+
+        const SEED_COUPONS = [
+            { code: 'MBBS20', discount: 20, expiry: '2026-12-31', active: true }
+        ];
+
+        const SEED_EXAMS = [
+            {
+                id: 'exam-1',
+                title: '1st Prof Anatomy Gross Mock Exam',
+                subject: 'Anatomy',
+                dateTime: '2026-11-15 | 10:00 AM',
+                url: 'https://forms.google.com',
+                status: 'Live'
+            }
+        ];
+
+        const SEED_VIDEOS = [
+            {
+                id: 'vid-1',
+                title: 'Thorax & Abdomen Anatomy Key Concepts',
+                subject: 'Anatomy',
+                chapter: 'Thorax',
+                videoUrl: 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
+                pdfName: 'Thorax_Anatomy_Notes_SohagBhai.pdf'
+            }
+        ];
+
+        let state = {
+            role: 'student', // 'student' or 'admin'
+            currentUser: { name: 'Dr. Rahat Ahmed', email: 'student@mbbs.com', id: 'SB-2026-0001', approved: true },
+            courses: [],
+            coupons: [],
+            exams: [],
+            videos: [],
+            emailRequests: [
+                { email: 'student@mbbs.com', status: 'Approved', date: '2026-11-01' }
+            ],
+            paymentRequests: [],
+            comments: [],
+            notifications: [
+                { id: 'n1', text: 'Welcome to Sohag Bhai MBBS Classes Platform!', time: 'Just now' }
+            ],
+            platformSettings: {
+                title: 'Sohag Bhai',
+                logoUrl: '',
+                bengaliMsg: 'Sohag Bhai MBBS Classes-এ আপনাদের সবাইকে আন্তরিক স্বাগতম। মেডিকেল শিক্ষাজীবনকে আরও সহজ, সুন্দর ও আনন্দময় করে তুলতে আমাদের এই ক্ষুদ্র প্রচেষ্টা। জ্ঞান অর্জনের পথচলায় আপনাদের পাশে থাকতে এবং শেখার অভিজ্ঞতাকে আরও সমৃদ্ধ করতে আমরা প্রতিনিয়ত কাজ করে যেতে চাই। আমাদের সঙ্গে থাকুন, শিখুন এবং এগিয়ে যান। ধন্যবাদ। ❤️',
+                bkash: '01711223344',
+                nagad: '01855667788',
+                adminPass: '#MyCourseMBBS'
+            },
+            activeVideoId: 'vid-1',
+            appliedCoupon: null
+        };
+
+        function initApp() {
+            if (!localStorage.getItem('sohag_db_courses')) localStorage.setItem('sohag_db_courses', JSON.stringify(SEED_COURSES));
+            if (!localStorage.getItem('sohag_db_coupons')) localStorage.setItem('sohag_db_coupons', JSON.stringify(SEED_COUPONS));
+            if (!localStorage.getItem('sohag_db_exams')) localStorage.setItem('sohag_db_exams', JSON.stringify(SEED_EXAMS));
+            if (!localStorage.getItem('sohag_db_videos')) localStorage.setItem('sohag_db_videos', JSON.stringify(SEED_VIDEOS));
+
+            state.courses = JSON.parse(localStorage.getItem('sohag_db_courses'));
+            state.coupons = JSON.parse(localStorage.getItem('sohag_db_coupons'));
+            state.exams = JSON.parse(localStorage.getItem('sohag_db_exams'));
+            state.videos = JSON.parse(localStorage.getItem('sohag_db_videos'));
+
+            if (localStorage.getItem('sohag_db_payments')) state.paymentRequests = JSON.parse(localStorage.getItem('sohag_db_payments'));
+            if (localStorage.getItem('sohag_db_emails')) state.emailRequests = JSON.parse(localStorage.getItem('sohag_db_emails'));
+
+            renderAll();
+        }
+
+        function saveAppState() {
+            localStorage.setItem('sohag_db_courses', JSON.stringify(state.courses));
+            localStorage.setItem('sohag_db_coupons', JSON.stringify(state.coupons));
+            localStorage.setItem('sohag_db_exams', JSON.stringify(state.exams));
+            localStorage.setItem('sohag_db_videos', JSON.stringify(state.videos));
+            localStorage.setItem('sohag_db_payments', JSON.stringify(state.paymentRequests));
+            localStorage.setItem('sohag_db_emails', JSON.stringify(state.emailRequests));
+        }
+
+        function renderAll() {
+            renderStorefrontGrid();
+            renderStudentDashboard();
+            renderExams();
+            renderAdminTables();
+            renderNotifications();
+            updateStats();
+        }
+
+        // ROLE SWITCHING & TABS
+        function switchRole(role) {
+            state.role = role;
+            const badge = document.getElementById('top-role-badge');
+            const info = document.getElementById('top-user-info');
+
+            if (role === 'admin') {
+                const pass = prompt('Enter Admin Access Password:', '');
+                if (pass !== state.platformSettings.adminPass) {
+                    alert('❌ Incorrect Admin Password!');
+                    state.role = 'student';
+                    return;
+                }
+                badge.innerText = 'Admin Portal Mode';
+                badge.className = 'bg-amber-500 text-black px-2 py-0.5 rounded font-bold text-[10px] uppercase';
+                info.innerText = 'Dr. Sohag (Admin)';
+                switchTab('admin-dashboard');
+            } else {
+                badge.innerText = 'Student View';
+                badge.className = 'bg-brand-500 text-white px-2 py-0.5 rounded font-semibold text-[10px] uppercase';
+                info.innerText = state.currentUser.name;
+                switchTab('home');
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function toggleNotificationCenter() {
+            document.getElementById('notif-drawer').classList.toggle('hidden');
+        }
+
+        // STOREFRONT / ENROLL
+        function renderStorefrontGrid() {
+            const grid = document.getElementById('enroll-courses-grid');
+            const homeGrid = document.getElementById('home-subjects-grid');
+
+            grid.innerHTML = state.courses.map(c => `
+                <div class="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700 flex flex-col justify-between p-5 space-y-4">
+                    <div class="space-y-3">
+                        <img src="${c.thumbnail}" class="w-full h-44 object-cover rounded-2xl">
+                        <span class="px-2.5 py-1 bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 text-[10px] font-extrabold rounded-full uppercase">${c.category}</span>
+                        <h3 class="font-black text-base text-gray-900 dark:text-white">${c.title}</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">${c.description}</p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 dark:border-gray-700 space-y-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-gray-400"><i class="fa-solid fa-users text-brand-500"></i> ${c.displayStudents} Enrolled</span>
+                            <span class="font-black text-lg text-brand-700 dark:text-brand-accent">৳${c.price.toLocaleString()}</span>
+                        </div>
+                        <button onclick="openCheckoutModal('${c.id}')" class="w-full py-3 bg-brand-500 hover:bg-brand-700 text-white font-bold rounded-xl text-xs shadow-md">Enroll Now</button>
+                    </div>
+                </div>
+            `).join('');
+
+            homeGrid.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h4 class="font-black text-lg text-red-500 mb-2">Anatomy</h4>
+                    <p class="text-xs text-gray-500 mb-4">Gross, Neuroanatomy & Histology Simplified.</p>
+                    <button onclick="switchTab('enroll')" class="w-full py-2 bg-brand-50 dark:bg-brand-900/50 text-brand-700 dark:text-brand-200 font-bold text-xs rounded-xl">View Anatomy Batches</button>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h4 class="font-black text-lg text-blue-500 mb-2">Physiology</h4>
+                    <p class="text-xs text-gray-500 mb-4">Organ Systems & Clinical Physiology.</p>
+                    <button onclick="switchTab('enroll')" class="w-full py-2 bg-brand-50 dark:bg-brand-900/50 text-brand-700 dark:text-brand-200 font-bold text-xs rounded-xl">View Physiology Batches</button>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h4 class="font-black text-lg text-emerald-500 mb-2">Biochemistry</h4>
+                    <p class="text-xs text-gray-500 mb-4">Metabolic Pathways & Enzymology.</p>
+                    <button onclick="switchTab('enroll')" class="w-full py-2 bg-brand-50 dark:bg-brand-900/50 text-brand-700 dark:text-brand-200 font-bold text-xs rounded-xl">View Biochemistry Batches</button>
+                </div>
+            `;
+        }
+
+        // CHECKOUT & PAYMENT SUBMISSION
+        function openCheckoutModal(courseId) {
+            const course = state.courses.find(c => c.id === courseId);
+            if (!course) return;
+
+            document.getElementById('checkout-course-id').value = course.id;
+            document.getElementById('checkout-course-title').innerText = course.title;
+            document.getElementById('checkout-orig-price').innerText = `৳${course.price.toLocaleString()}`;
+            document.getElementById('checkout-final-price').innerText = `৳${course.price.toLocaleString()}`;
+            document.getElementById('checkout-bkash-num').innerText = state.platformSettings.bkash;
+            document.getElementById('checkout-nagad-num').innerText = state.platformSettings.nagad;
+
+            state.appliedCoupon = null;
+            document.getElementById('modal-checkout').classList.remove('hidden');
+        }
+
+        function applyCoupon() {
+            const code = document.getElementById('checkout-coupon-code').value.trim().toUpperCase();
+            const coupon = state.coupons.find(c => c.code === code && c.active);
+            const courseId = document.getElementById('checkout-course-id').value;
+            const course = state.courses.find(c => c.id === courseId);
+
+            if (!coupon) {
+                alert('❌ Invalid or expired coupon code!');
+                return;
+            }
+
+            state.appliedCoupon = coupon;
+            const discountAmt = (course.price * coupon.discount) / 100;
+            const finalPrice = course.price - discountAmt;
+
+            document.getElementById('checkout-discount-amt').innerText = `-৳${discountAmt.toLocaleString()} (${coupon.discount}%)`;
+            document.getElementById('checkout-final-price').innerText = `৳${finalPrice.toLocaleString()}`;
+            alert(`🎉 Coupon '${coupon.code}' applied! You saved ${coupon.discount}%.`);
+        }
+
+        function submitCoursePayment(e) {
+            e.preventDefault();
+            const courseId = document.getElementById('checkout-course-id').value;
+            const course = state.courses.find(c => c.id === courseId);
+            const trxId = document.getElementById('checkout-trxid').value.trim().toUpperCase();
+
+            const payReq = {
+                id: 'pay-' + Date.now(),
+                studentName: state.currentUser.name,
+                studentEmail: state.currentUser.email,
+                courseId: course.id,
+                courseTitle: course.title,
+                price: course.price,
+                method: document.getElementById('checkout-method').value,
+                phone: document.getElementById('checkout-phone').value,
+                trxId: trxId,
+                status: 'Pending',
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            state.paymentRequests.unshift(payReq);
+            saveAppState();
+            closeModal('modal-checkout');
+            alert('🎉 Payment request submitted! Access will be granted following Admin verification.');
+            switchTab('student-dashboard');
+            renderStudentDashboard();
+        }
+
+        // STUDENT DASHBOARD
+        function renderStudentDashboard() {
+            const approvedPays = state.paymentRequests.filter(p => p.studentEmail === state.currentUser.email && p.status === 'Approved');
+            const historyBox = document.getElementById('student-payment-requests-history');
+            const grid = document.getElementById('student-enrolled-grid');
+
+            if (approvedPays.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-gray-400 col-span-full">No approved course access yet. Enroll in courses from the Marketplace.</p>`;
+            } else {
+                grid.innerHTML = approvedPays.map(p => `
+                    <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 space-y-2">
+                        <h4 class="font-bold text-xs text-brand-700 dark:text-brand-300">${p.courseTitle}</h4>
+                        <button onclick="openVideoPlayer('vid-1')" class="w-full py-2 bg-emerald-600 text-white rounded-xl font-bold text-xs">Play Video Lessons</button>
+                    </div>
+                `).join('');
+            }
+
+            historyBox.innerHTML = state.paymentRequests.filter(p => p.studentEmail === state.currentUser.email).map(p => `
+                <div class="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-xl flex justify-between items-center">
+                    <div>
+                        <p class="font-bold">${p.courseTitle}</p>
+                        <p class="text-gray-400 font-mono">TrxID: ${p.trxId}</p>
+                    </div>
+                    <span class="px-2 py-0.5 rounded font-bold ${p.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${p.status}</span>
+                </div>
+            `).join('');
+        }
+
+        // EXTERNAL EXAMINATIONS
+        function renderExams() {
+            const grid = document.getElementById('student-exams-grid');
+            grid.innerHTML = state.exams.map(e => `
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-3xl border border-gray-100 dark:border-gray-700 space-y-3">
+                    <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 font-bold rounded-full text-[10px]">${e.subject}</span>
+                    <h4 class="font-black text-sm">${e.title}</h4>
+                    <p class="text-xs text-gray-400"><i class="fa-solid fa-calendar mr-1"></i> ${e.dateTime}</p>
+                    <a href="${e.url}" target="_blank" class="block w-full text-center py-2.5 bg-brand-500 text-white font-bold rounded-xl text-xs hover:bg-brand-700">
+                        Start Examination <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        // ADMIN DASHBOARD SUBTABS & TABLES
+        function switchAdminSubTab(sub) {
+            document.querySelectorAll('.admin-tab-btn').forEach(b => {
+                b.classList.remove('border-brand-500', 'text-brand-700', 'dark:text-brand-300');
+                b.classList.add('border-transparent', 'text-gray-500');
+            });
+            document.getElementById(`subtab-${sub}`).classList.add('border-brand-500', 'text-brand-700', 'dark:text-brand-300');
+
+            ['emails', 'payments', 'courses', 'coupons', 'exams', 'videos', 'settings'].forEach(s => {
+                document.getElementById(`admin-sec-${s}`).classList.add('hidden');
+            });
+            document.getElementById(`admin-sec-${sub}`).classList.remove('hidden');
+        }
+
+        function renderAdminTables() {
+            // Email Requests Table
+            document.getElementById('admin-table-emails').innerHTML = state.emailRequests.map(r => `
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-900">
+                    <td class="p-3 font-semibold">${r.email}</td>
+                    <td class="p-3 text-gray-400">${r.date}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 rounded font-bold ${r.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${r.status}</span></td>
+                    <td class="p-3 text-right">
+                        ${r.status === 'Pending' ? `<button onclick="approveEmail('${r.email}')" class="px-2 py-1 bg-emerald-600 text-white rounded font-bold">Approve</button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+
+            // Payment Requests Table
+            document.getElementById('admin-table-payments').innerHTML = state.paymentRequests.map(p => `
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-900">
+                    <td class="p-3 font-semibold">${p.studentName}<br><span class="text-gray-400">${p.studentEmail}</span></td>
+                    <td class="p-3 font-bold text-brand-500">${p.courseTitle}</td>
+                    <td class="p-3">${p.method}<br><b>৳${p.price}</b></td>
+                    <td class="p-3 font-mono">${p.phone}<br><b>${p.trxId}</b></td>
+                    <td class="p-3 text-gray-400">N/A</td>
+                    <td class="p-3"><span class="px-2 py-0.5 rounded font-bold ${p.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${p.status}</span></td>
+                    <td class="p-3 text-right">
+                        ${p.status === 'Pending' ? `<button onclick="approvePayment('${p.id}')" class="px-2 py-1 bg-emerald-600 text-white rounded font-bold">Approve Access</button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function approveEmail(email) {
+            const req = state.emailRequests.find(r => r.email === email);
+            if (req) {
+                req.status = 'Approved';
+                saveAppState();
+                renderAdminTables();
+                alert(`✅ Registration access approved for ${email}`);
+            }
+        }
+
+        function approvePayment(payId) {
+            const pay = state.paymentRequests.find(p => p.id === payId);
+            if (pay) {
+                pay.status = 'Approved';
+                
+                // Increment dynamic display count
+                const course = state.courses.find(c => c.id === pay.courseId);
+                if (course) course.displayStudents += 1;
+
+                saveAppState();
+                renderAdminTables();
+                renderStorefrontGrid();
+                alert(`✅ Payment approved for ${pay.studentName}. Course unlocked!`);
+            }
+        }
+
+        // VIDEO PLAYER & COMMENTS
+        function openVideoPlayer(videoId) {
+            document.getElementById('modal-video-player').classList.remove('hidden');
+        }
+
+        function postComment(e) {
+            e.preventDefault();
+            const txt = document.getElementById('comment-input').value;
+            const commentBox = document.getElementById('player-comments-list');
+            
+            const newComment = `<div class="bg-gray-950 p-2.5 rounded-xl border border-gray-800">
+                <span class="font-bold text-brand-accent">${state.currentUser.name}:</span> ${txt}
+            </div>`;
+            
+            commentBox.innerHTML = newComment + commentBox.innerHTML;
+            document.getElementById('comment-input').value = '';
+        }
+
+        // UTILS & STATS
+        function updateStats() {
+            document.getElementById('stat-total-students').innerText = '1';
+            document.getElementById('stat-pending-emails').innerText = state.emailRequests.filter(r => r.status === 'Pending').length;
+            document.getElementById('stat-pending-payments').innerText = state.paymentRequests.filter(p => p.status === 'Pending').length;
+            document.getElementById('stat-total-courses').innerText = state.courses.length;
+            document.getElementById('stat-total-videos').innerText = state.videos.length;
+
+            const rev = state.paymentRequests.filter(p => p.status === 'Approved').reduce((s, p) => s + p.price, 0);
+            document.getElementById('stat-total-revenue').innerText = `৳${rev.toLocaleString()}`;
+        }
+
+        function renderNotifications() {
+            document.getElementById('notif-list').innerHTML = state.notifications.map(n => `
+                <div class="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                    <p class="font-semibold text-gray-800 dark:text-gray-200">${n.text}</p>
+                    <span class="text-[9px] text-gray-400">${n.time}</span>
+                </div>
+            `).join('');
+        }
+
+        function openAuthModal() { document.getElementById('modal-auth').classList.remove('hidden'); }
+        function openFirstTimeApprovalModal() { document.getElementById('modal-firsttime').classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function submitFirstTimeEmail(e) {
+            e.preventDefault();
+            const email = document.getElementById('firsttime-email').value;
+            state.emailRequests.unshift({ email, status: 'Pending', date: new Date().toISOString().split('T')[0] });
+            saveAppState();
+            closeModal('modal-firsttime');
+            alert('🎉 Request submitted! You will be able to register once Admin approves your email address.');
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
